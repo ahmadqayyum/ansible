@@ -1,6 +1,12 @@
 name: deploy to AWS lambda
-on: [push]
-  branches:
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
       - develop
 jobs:
   deploy_source:

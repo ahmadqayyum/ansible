@@ -1,0 +1,22 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '8.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm install node-lambda -g
+  displayName: 'npm install'
+
+- script: |
+    node-lambda deploy -a $(AWS_ACCESS_KEY) -s $(AWS_SECRET_KEY) -o $(AWS_ROLE) -r $(AWS_REGION) -n $(AWS_LAMBDA_FUNCTION_NAME) --excludeGlobs "azure-pipelines.yml"
+  displayName: 'Deploy to AWS'

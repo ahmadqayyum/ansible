@@ -1,36 +1,14 @@
-name: Sonar qube and deploy to AWS lambda
-on:
-  # Trigger the workflow on push or pull request,
-  # but only for the master branch
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+name: Build
+on: [push]
+
 jobs:
-  deploy_source:
-    name: build and deploy lambda
-    strategy:
-      matrix:
-        node-version: [12.x]
+  sonarCloudTrigger:
+    name: SonarCloud Trigger
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-           projectBaseDir: my-function
-        env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm install and build
-        run: |
-          npm run build --if-present
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
-          CI: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

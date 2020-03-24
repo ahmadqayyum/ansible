@@ -16,6 +16,14 @@ jobs:
         node-version: [12.x]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@master
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+           projectBaseDir: my-function
+        env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1

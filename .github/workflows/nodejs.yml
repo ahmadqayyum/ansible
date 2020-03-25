@@ -27,7 +27,7 @@ jobs:
     - run: npm i
     - run: npm run build --if-present
     - run: npm install express --save
-    - run: node index.js
+    - run: node index.js &
     - run: npm install mocha chai --save-dev
     - run: npm install request --save-dev
     - run: npm test

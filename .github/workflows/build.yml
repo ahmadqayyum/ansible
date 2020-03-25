@@ -19,11 +19,6 @@ jobs:
           npm run build --if-present
         env:
           CI: true
-#   sonarCloudTrigger:
-#     name: SonarCloud Trigger
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v1
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

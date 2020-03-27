@@ -63,7 +63,6 @@ jobs:
       #   container-structure-test test --image $ART_REGISTRY/cds/$CONTAINER_IMAGE:${{ env.IMG_VERSION }} --config cst/filesystem_tests.yaml --test-report structure-test-results.json
 
 
-
     #   - name: "Vulnerability Scan"
     #   continue-on-error: true
     #   run: |

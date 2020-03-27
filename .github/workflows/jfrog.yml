@@ -40,9 +40,7 @@ jobs:
       - run: npm test
         env:
           CI: true
-          
-      - name: Checkout
-        uses: actions/checkout@master
+  
       - name: "jfrog install, configure cli"
         run: |
           # Get Jfrog CLI

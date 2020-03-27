@@ -1,4 +1,4 @@
-name: Build and Publish and Scan
+name: Node.js CI
 on:
   push:
     branches: [ master ]
@@ -11,9 +11,43 @@ env:
   ART_REPO: libs-release-local
   FUN_NAME: index.js
   CI: true
+  
 jobs:
-  build-and-push:
-    name: Build and deploy
+  Sona_Scan:
+    name: SCAN Code Using Sonarscanner and push to SOnar Cloud
+    strategy:
+      matrix:
+        node-version: [12.x]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKENS }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
+  Build and Test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm i
+    - run: npm run build --if-present
+    - run: npm install express --save
+    - run: node index.js &
+    - run: npm install mocha chai --save-dev
+    - run: npm install request --save-dev
+    - run: npm test
+      env:
+        CI: true
+
+  PUSH Jfrog:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -28,4 +62,36 @@ jobs:
     - name: "Configure Jfrog"
       run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
     - name: "Push Release To Jfrog"
-      run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=false
+      run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=fals
+
+# name: Build and Publish and Scan
+# on:
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
+# env:
+#   ART_URL: http://54.194.230.60:8081/artifactory/
+#   ART_USER: admin
+#   SERVER_ID: ahmad
+#   ART_REPO: libs-release-local
+#   FUN_NAME: index.js
+#   CI: true
+# jobs:
+#   build-and-push:
+#     name: Build and deploy
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@master
+#     - name: "jfrog install, configure cli"
+#       run: |
+#         # Get Jfrog CLI
+#             echo "Jfrog binary does not exist. Downloading now...."
+#             curl -fL https://getcli.jfrog.io | sh -s 1.32.4
+#             sudo mv jfrog /usr/local/bin
+#         # Configure Jfrog CLI
+#     - name: "Configure Jfrog"
+#       run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
+#     - name: "Push Release To Jfrog"
+#       run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=false

@@ -1,26 +1,71 @@
- 
-name: "JFrog CLI Example"
-on: push
+name: Build and Publish and Scan
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+env:
+  # CONTAINER_IMAGE: cloudbees-cloud-core-oc
+  # ART_REGISTRY: abbvie-docker-stage-local.jfrog.io
+  ART_URL: http://54.194.230.60:8081/artifactory/
+  ART_USER: admin
+  SERVER_ID: ahmad
+  CI: true
 
 jobs:
-  build:
+  build-and-push:
+    name: Build and deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Setup JFrog CLI
-        uses: jfrog/setup-jfrog-cli@v1
-        env:
-          url: 'http://54.194.230.60:8081/'
-          credentials type: 'user'
-          username: ${{ secrets.RT_USER }}
-          password: ${{ secrets.RT_PASSWORD }}
-          
-      - name: Run JFrog CLI
-        run: |
-          # Collect environment variables for the build
-          jfrog rt bce
-          # Collect VCS details from git and add them to the build
-          jfrog rt bag
-          # Publish build info
-          jfrog rt bp
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: "jfrog install, configure cli"
+      run: |
+        # Get Jfrog CLI
+        if [ -e jfrog ]; then
+            echo "Jfrog binary already exists. Logging into Artifactory now.."
+        else
+            echo "Jfrog binary does not exist. Downloading now...."
+            curl -fL https://getcli.jfrog.io | sh -s 1.32.4
+            sudo mv jfrog /usr/local/bin
+        fi
+        # Configure Jfrog CLI
+        jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
+    # - name: Build and push image
+    #   uses: docker/build-push-action@v1.0.0
+    #   with:
+    #     username: ${{ env.ART_USER }}
+    #     password: ${{ secrets.ART_PASS }}
+    #     repository: cds/cloudbees-cloud-core-oc
+    #     registry: ${{ env.ART_REGISTRY }}
+    #     push: true
+    #     tag_with_sha: true
+    #     add_git_labels: true
+
+
+
+    # - name: "Publish Build to Artifactory"
+    #   run: |
+    #     # --- Jfrog Push Docker Context
+    #     jfrog rt docker-push $ART_REGISTRY/cds/$CONTAINER_IMAGE:${{ env.IMG_VERSION }} docker-stage-local
+    #     jfrog rt build-collect-env
+    #     jfrog rt build-publish --env-exclude="*key*;*pass*;"
+
+
+
+    # - name: Structure Tests
+    #   continue-on-error: true
+      # run: |
+      #   # Install structure-tests
+      #   curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64
+      #   chmod +x container-structure-test-linux-amd64
+      #   sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
+      #   container-structure-test test --image $ART_REGISTRY/cds/$CONTAINER_IMAGE:${{ env.IMG_VERSION }} --config cst/filesystem_tests.yaml --test-report structure-test-results.json
+
+
+
+    #   - name: "Vulnerability Scan"
+    #   continue-on-error: true
+    #   run: |
+    #     jfrog rt build-scan --fail=false | tee xray-results.json
+    # # promote image

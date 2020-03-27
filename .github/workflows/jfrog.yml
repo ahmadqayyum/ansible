@@ -24,5 +24,6 @@ jobs:
             sudo mv jfrog /usr/local/bin
         # Configure Jfrog CLI
     - name: "Configure Jfrog"
-      run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
-      
+      run: |
+         jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
+         jfrog rt u "(*).js" libs-release-local/{1}/ --recursive=false

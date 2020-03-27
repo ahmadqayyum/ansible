@@ -8,6 +8,8 @@ env:
   ART_URL: http://54.194.230.60:8081/artifactory/
   ART_USER: admin
   SERVER_ID: ahmad
+  ART_REPO: libs-release-local
+  FUN_NAME: index.js
   CI: true
 jobs:
   build-and-push:
@@ -26,4 +28,4 @@ jobs:
     - name: "Configure Jfrog"
       run: |
          jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
-         jfrog rt u "(*).js" libs-release-local/{1}/ --recursive=false
+         jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=false

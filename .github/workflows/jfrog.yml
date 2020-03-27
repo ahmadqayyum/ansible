@@ -9,7 +9,6 @@ env:
   ART_USER: admin
   SERVER_ID: ahmad
   CI: true
-
 jobs:
   build-and-push:
     name: Build and deploy

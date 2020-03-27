@@ -1,4 +1,4 @@
-name: Node.js CI
+name: AWS Lambda CI
 on:
   push:
     branches: [ master ]
@@ -13,8 +13,8 @@ env:
   CI: true
   
 jobs:
-  QUALITY_BUILD_TEST_DEPLOY:
-    name: SCAN Code Using Sonarscanner and push to SOnar Cloud
+  CI:
+    name: SonarScan ===> BUILD ===> TEST ===> DEPLOY
     strategy:
       matrix:
         node-version: [12.x]
@@ -40,7 +40,9 @@ jobs:
       - run: npm test
         env:
           CI: true
-  
+          
+      - name: Checkout
+        uses: actions/checkout@master
       - name: "jfrog install, configure cli"
         run: |
           # Get Jfrog CLI
@@ -52,7 +54,6 @@ jobs:
         run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
       - name: "Push Release To Jfrog"
         run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=false
-
 
 
 

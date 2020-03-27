@@ -1,21 +1,18 @@
-name: "JFrog CLI Example"
 on: push
-
+name: Main Workflow
 jobs:
-  build:
+  artifactoryUpload:
+    name: Upload Trigger
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Setup JFrog CLI
-        uses: jfrog/setup-jfrog-cli@v1
-        env:
-          JF_ARTIFACTORY_SERVER: ${{ secrets.JF_ARTIFACTORY_SERVER_1 }}
-      - name: Run JFrog CLI
-        run: |
-          # Collect environment variables for the build
-          jfrog rt bce
-          # Collect VCS details from git and add them to the build
-          jfrog rt bag
-          # Publish build info
-          jfrog rt bp
+    - uses: actions/checkout@v1.2.0
+    - name: build
+      run: ./buildmyartifact.sh
+    - name: publish to artifactory
+      uses: advancedcsg-open/action-jfrog-cli@master
+      with:
+        url: 'http://54.194.230.60:8081/'
+        credentials type: 'user'
+        username: ${{ secrets.RT_USER }}
+        password: ${{ secrets.RT_PASSWORD }}
+        args: u "dist/*" "/mu/repo/path/" --recursive=true --build-name=myawesomeapp

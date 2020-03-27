@@ -13,7 +13,7 @@ env:
   CI: true
   
 jobs:
-  Sona_Scan:
+  QUALITY_BUILD_TEST_DEPLOY:
     name: SCAN Code Using Sonarscanner and push to SOnar Cloud
     strategy:
       matrix:
@@ -26,11 +26,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKENS }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
-  Build_est:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
+  # Build_est:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [12.x]
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
@@ -47,8 +47,8 @@ jobs:
       env:
         CI: true
 
-  PUSH_Jfrog:
-    runs-on: ubuntu-latest
+  # PUSH_Jfrog:
+  #   runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@master
@@ -63,6 +63,8 @@ jobs:
       run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
     - name: "Push Release To Jfrog"
       run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=false
+
+
 
 # name: Build and Publish and Scan
 # on:

@@ -26,43 +26,35 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKENS }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
-  # Build_est:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [12.x]
-    steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i
-    - run: npm run build --if-present
-    - run: npm install express --save
-    - run: node index.js &
-    - run: npm install mocha chai --save-dev
-    - run: npm install request --save-dev
-    - run: npm test
-      env:
-        CI: true
 
-  # PUSH_Jfrog:
-  #   runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@master
-    - name: "jfrog install, configure cli"
-      run: |
-        # Get Jfrog CLI
-            echo "Jfrog binary does not exist. Downloading now...."
-            curl -fL https://getcli.jfrog.io | sh -s 1.32.4
-            sudo mv jfrog /usr/local/bin
-        # Configure Jfrog CLI
-    - name: "Configure Jfrog"
-      run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
-    - name: "Push Release To Jfrog"
-      run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=false
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i
+      - run: npm run build --if-present
+      - run: npm install express --save
+      - run: node index.js &
+      - run: npm install mocha chai --save-dev
+      - run: npm install request --save-dev
+      - run: npm test
+        env:
+          CI: true
+          
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: "jfrog install, configure cli"
+        run: |
+          # Get Jfrog CLI
+              echo "Jfrog binary does not exist. Downloading now...."
+              curl -fL https://getcli.jfrog.io | sh -s 1.32.4
+              sudo mv jfrog /usr/local/bin
+          # Configure Jfrog CLI
+      - name: "Configure Jfrog"
+        run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
+      - name: "Push Release To Jfrog"
+        run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=false
+
 
 
 

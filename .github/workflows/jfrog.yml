@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x]
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
@@ -62,7 +62,7 @@ jobs:
     - name: "Configure Jfrog"
       run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
     - name: "Push Release To Jfrog"
-      run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=fals
+      run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=false
 
 # name: Build and Publish and Scan
 # on:

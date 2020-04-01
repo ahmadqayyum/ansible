@@ -18,10 +18,11 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: ls opt directory
-      - uses: actions/checkout@master
+        uses: actions/checkout@master
         with:
           command: |
            cd /opt
+           echo 'test azure'
            ls -a
            touch testazure.yml
            git pull

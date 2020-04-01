@@ -17,15 +17,12 @@ jobs:
   Unit_TEST:
     runs-on: self-hosted
     steps:
+      - uses: actions/checkout@master
       - name: ls opt directory
         uses: actions/checkout@master
-        with:
-          command: |
-           cd /opt
-           echo 'test azure'
-           ls -a
-           touch testazure.yml
-           git pull
+      - run: ls
+      - run: echo 'test azure ahmad'
+      - run: touch abcdef.txt
   CI:
     name: SonarScan ===> BUILD ===> TEST ===> DEPLOY
     strategy:

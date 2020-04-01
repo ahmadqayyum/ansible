@@ -14,15 +14,6 @@ env:
   CI: true
   
 jobs:
-  Unit_TEST:
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@master
-      - name: ls opt directory
-        uses: actions/checkout@master
-      - run: ls
-      - run: echo 'test azure ahmad'
-      - run: touch abcdef.txt
   CI:
     name: SonarScan ===> BUILD ===> TEST ===> DEPLOY
     strategy:
@@ -59,7 +50,21 @@ jobs:
       - run: npm test
         env:
           CI: true
-
+  Unit_TEST:
+    name : unit test
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@master
+      - name: ls opt directory
+        uses: actions/checkout@master
+      - run: ls
+      - run: echo 'test azure ahmad'
+      - run: touch abcdef.txt
+  Deploytojfrog:
+    name : deploy to jfrog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
       - name: "jfrog install, configure cli"
         run: |
           # Get Jfrog CLI
@@ -71,37 +76,3 @@ jobs:
         run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
       - name: "Push Release To Jfrog"
         run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=false
-
-
-
-# name: Build and Publish and Scan
-# on:
-#   push:
-#     branches: [ master ]
-#   pull_request:
-#     branches: [ master ]
-# env:
-#   ART_URL: http://54.194.230.60:8081/artifactory/
-#   ART_USER: admin
-#   SERVER_ID: ahmad
-#   ART_REPO: libs-release-local
-#   FUN_NAME: index.js
-#   CI: true
-# jobs:
-#   build-and-push:
-#     name: Build and deploy
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: Checkout
-#       uses: actions/checkout@master
-#     - name: "jfrog install, configure cli"
-#       run: |
-#         # Get Jfrog CLI
-#             echo "Jfrog binary does not exist. Downloading now...."
-#             curl -fL https://getcli.jfrog.io | sh -s 1.32.4
-#             sudo mv jfrog /usr/local/bin
-#         # Configure Jfrog CLI
-#     - name: "Configure Jfrog"
-#       run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
-#     - name: "Push Release To Jfrog"
-#       run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --recursive=false

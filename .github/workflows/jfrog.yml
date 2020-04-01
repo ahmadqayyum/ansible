@@ -17,8 +17,8 @@ jobs:
   simpleExample:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@master
       - name: ls opt directory
+        uses: actions/checkout@master
         with:
           command: |
            cd /opt

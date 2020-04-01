@@ -10,6 +10,7 @@ env:
   SERVER_ID: ahmad
   ART_REPO: libs-release-local
   FUN_NAME: index.js
+  USER: ec2-user
   CI: true
   
 jobs:
@@ -21,6 +22,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: ls -a via ssh
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+           cd /opt
+           ls -a
+          host: ${{ secrets.HOST }}
+          user: $USER
+          key: ${{ secrets.PRIVATE_KEY}}
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

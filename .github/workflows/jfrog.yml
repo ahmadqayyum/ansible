@@ -51,8 +51,9 @@ jobs:
         env:
           CI: true
   Unit_TEST:
+    needs: CI
     name : unit test
-    runs-on: self-hosted
+    runs-on: self-hosted 
     steps:
       - uses: actions/checkout@master
       - name: ls opt directory
@@ -61,6 +62,7 @@ jobs:
       - run: echo 'test azure ahmad'
       - run: touch abcdef.txt
   Deploytojfrog:
+    needs: [CI, Unit_TEST]
     name : deploy to jfrog
     runs-on: ubuntu-latest
     steps:

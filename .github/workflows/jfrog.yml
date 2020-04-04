@@ -14,7 +14,7 @@ env:
   CI: true
   
 jobs:
-#   CI:
+##   CI:
 #     name: SonarScan ===> BUILD ===> TEST ===> DEPLOY
 #     strategy:
 #       matrix:

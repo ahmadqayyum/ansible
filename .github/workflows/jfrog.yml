@@ -14,55 +14,55 @@ env:
   CI: true
   
 jobs:
-  CI:
-    name: SonarScan ===> BUILD ===> TEST ===> DEPLOY
-    strategy:
-      matrix:
-        node-version: [12.x]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: ls -a via ssh
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-           cd /opt
-           ls -a
-          host: ${{ secrets.HOST }}
-          user: $USER
-          key: ${{ secrets.PRIVATE_KEY}}
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKENS }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
+#   CI:
+#     name: SonarScan ===> BUILD ===> TEST ===> DEPLOY
+#     strategy:
+#       matrix:
+#         node-version: [12.x]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v1
+#       - name: ls -a via ssh
+#         uses: fifsky/ssh-action@master
+#         with:
+#           command: |
+#            cd /opt
+#            ls -a
+#           host: ${{ secrets.HOST }}
+#           user: $USER
+#           key: ${{ secrets.PRIVATE_KEY}}
+#       - name: SonarCloud Scan
+#         uses: SonarSource/sonarcloud-github-action@master
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKENS }}
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm i
-      - run: npm run build --if-present
-      - run: npm install express --save
-      - run: node index.js &
-      - run: npm install mocha chai --save-dev
-      - run: npm install request --save-dev
-      - run: npm test
-        env:
-          CI: true
-  Unit_TEST:
-    needs: CI
-    name : unit test
-    runs-on: self-hosted 
-    steps:
-      - uses: actions/checkout@master
-      - name: ls opt directory
-        uses: actions/checkout@master
-      - run: ls
-      - run: echo 'test azure ahmad'
-      - run: touch abcdef.txt
+#       - name: Use Node.js ${{ matrix.node-version }}
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: ${{ matrix.node-version }}
+#       - run: npm i
+#       - run: npm run build --if-present
+#       - run: npm install express --save
+#       - run: node index.js &
+#       - run: npm install mocha chai --save-dev
+#       - run: npm install request --save-dev
+#       - run: npm test
+#         env:
+#           CI: true
+#   Unit_TEST:
+#     needs: CI
+#     name : unit test
+#     runs-on: self-hosted 
+#     steps:
+#       - uses: actions/checkout@master
+#       - name: ls opt directory
+#         uses: actions/checkout@master
+#       - run: ls
+#       - run: echo 'test azure ahmad'
+#       - run: touch abcdef.txt
   Deploytojfrog:
-    needs: [CI, Unit_TEST]
+#    needs: [CI, Unit_TEST]
     name : deploy to jfrog
     runs-on: ubuntu-latest
     steps:

@@ -8,7 +8,7 @@ env:
   ART_URL: http://54.194.230.60:8081/artifactory/
   ART_USER: admin
   SERVER_ID: ahmad
-  ART_REPO: libs-release-local
+  ART_REPO: ext-snapshot-local #libs-release-local
   FUN_NAME: test
   USER: ec2-user
   CI: true

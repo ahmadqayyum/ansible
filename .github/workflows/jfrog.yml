@@ -9,7 +9,7 @@ env:
   ART_USER: admin
   SERVER_ID: ahmad
   ART_REPO: libs-release-local
-  FUN_NAME: index.js
+  FUN_NAME: test
   USER: ec2-user
   CI: true
   

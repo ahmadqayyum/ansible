@@ -77,4 +77,5 @@ jobs:
       - name: "Configure Jfrog"
         run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
       - name: "Push Release To Jfrog"
-        run: jfrog rt u $FUN_NAME $ART_REPO/{1}/ --build-number=$CIRCLE_BUILD_NUM --flat=false --recursive=true
+        run: jfrog rt u $FUN_NAME $ART_REPO/ --build-number=$CIRCLE_BUILD_NUM
+# --flat=false --recursive=false

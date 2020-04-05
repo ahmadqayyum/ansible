@@ -79,6 +79,6 @@ jobs:
         run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
       - name: "Push Release To Jfrog"
         #run: jfrog rt npmi npm-virtual --build-name=bootstrap --build-number=1.0.0
-        run: jfrog rt npmp npm-virtual --build-name=bootstrap --build-number=1.0.0
+        run: jfrog rt npmp 54.194.230.60 --build-name=bootstrap --build-number=1.0.0
        # run: jfrog rt u "test/" $ART_REPO/{1}/ --build-number=18
 # --flat=false --recursive=false

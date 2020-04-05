@@ -81,6 +81,7 @@ jobs:
         #run: jfrog rt npmi npm-virtual --build-name=bootstrap --build-number=1.0.0
         run: jfrog rt build-collect-env
       - name: "publish"
-        run: jfrog rt u "test/" $ART_REPO/ build-publish --env-exclude="*key*;*pass*;"
+        run: jfrog rt build-publish --env-exclude="*key*;*pass*;"
+       # run: jfrog rt build-publish "test/" $ART_REPO/  --env-exclude="*key*;*pass*;"
         #run: jfrog rt u "test/" $ART_REPO/{1}/ --build-number=18
 # --flat=false --recursive=false

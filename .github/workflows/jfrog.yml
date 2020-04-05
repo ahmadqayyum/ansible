@@ -75,6 +75,9 @@ jobs:
               sudo mv jfrog /usr/local/bin
           # Configure Jfrog CLI
               jfrog --version
+                echo ::set-env name=JFROG_CLI_BUILD_NAME::$(echo $BUILD_NAME)
+                echo ::set-env name=JFROG_CLI_BUILD_NUMBER::$(echo $GITHUB_RUN_ID)
+                echo ::set-env name=JFROG_CLI_BUILD_URL::$(echo $BUILD_URL):
       - name: "Configure Jfrog"
         run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
       - name: "Push Release To Jfrog"

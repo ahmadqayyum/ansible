@@ -21,21 +21,21 @@ jobs:
         node-version: [12.x]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: ls -a via ssh
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-           cd /opt
-           ls -a
-          host: ${{ secrets.HOST }}
-          user: $USER
-          key: ${{ secrets.PRIVATE_KEY}}
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKENS }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
+#       - uses: actions/checkout@v1
+#       - name: ls -a via ssh
+#         uses: fifsky/ssh-action@master
+#         with:
+#           command: |
+#            cd /opt
+#            ls -a
+#           host: ${{ secrets.HOST }}
+#           user: $USER
+#           key: ${{ secrets.PRIVATE_KEY}}
+#       - name: SonarCloud Scan
+#         uses: SonarSource/sonarcloud-github-action@master
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKENS }}
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -51,17 +51,17 @@ jobs:
       - run: npm test
         env:
            CI: true
-   Unit_TEST:
-    needs: CI
-    name : unit test
-    runs-on: self-hosted 
-    steps:
-      - uses: actions/checkout@master
-      - name: ls opt directory
-        uses: actions/checkout@master
-      - run: ls
-      - run: echo 'test azure ahmad'
-      - run: touch abcdef.txt
+#    Unit_TEST:
+#     needs: CI
+#     name : unit test
+#     runs-on: self-hosted 
+#     steps:
+#       - uses: actions/checkout@master
+#       - name: ls opt directory
+#         uses: actions/checkout@master
+#       - run: ls
+#       - run: echo 'test azure ahmad'
+#       - run: touch abcdef.txt
    Deploytojfrog:
 #    needs: [CI, Unit_TEST]
     name : deploy to jfrog

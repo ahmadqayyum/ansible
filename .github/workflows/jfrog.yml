@@ -14,7 +14,7 @@ env:
   CI: true
   
 jobs:
-#   CI:
+   CI:
 #     name: SonarScan ===> BUILD ===> TEST ===> DEPLOY
 #     strategy:
 #       matrix:
@@ -37,19 +37,20 @@ jobs:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKENS }}
 #           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
 
-#       - name: Use Node.js ${{ matrix.node-version }}
-#         uses: actions/setup-node@v1
-#         with:
-#           node-version: ${{ matrix.node-version }}
-#       - run: npm i
-#       - run: npm run build --if-present
-#       - run: npm install express --save
-#       - run: node index.js &
-#       - run: npm install mocha chai --save-dev
-#       - run: npm install request --save-dev
-#       - run: npm test
-#         env:
-#           CI: true
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: sed  -i '/version/s/[^.]*$/'"${BUILD_NUMBER}\"/" package.json
+      - run: npm i  
+      - run: npm run build --if-present
+      - run: npm install express --save
+      - run: node index.js &
+      - run: npm install mocha chai --save-dev
+      - run: npm install request --save-dev
+      - run: npm test
+        env:
+           CI: true
 #   Unit_TEST:
 #     needs: CI
 #     name : unit test
@@ -61,7 +62,7 @@ jobs:
 #       - run: ls
 #       - run: echo 'test azure ahmad'
 #       - run: touch abcdef.txt
-  Deploytojfrog:
+   Deploytojfrog:
 #    needs: [CI, Unit_TEST]
     name : deploy to jfrog
     runs-on: ubuntu-latest
@@ -74,17 +75,18 @@ jobs:
               curl -fL https://getcli.jfrog.io | sh -s 1.32.4
               sudo mv jfrog /usr/local/bin
           # Configure Jfrog CLI
-              jfrog --version
-                echo ::set-env name=JFROG_CLI_BUILD_NAME::$(echo $BUILD_NAME)
-                echo ::set-env name=JFROG_CLI_BUILD_NUMBER::$(echo $GITHUB_RUN_ID)
-                echo ::set-env name=JFROG_CLI_BUILD_URL::$(echo $BUILD_URL):
+#              jfrog --version
+#                echo ::set-env name=JFROG_CLI_BUILD_NAME::$(echo $BUILD_NAME)
+#                echo ::set-env name=JFROG_CLI_BUILD_NUMBER::$(echo $GITHUB_RUN_ID)
+#                echo ::set-env name=JFROG_CLI_BUILD_URL::$(echo $BUILD_URL):
       - name: "Configure Jfrog"
         run: jfrog rt config $SERVER_ID --url=$ART_URL --user=$ART_USER --password=${{ secrets.RT_PASSWORD }} --interactive=false
-      - name: "Push Release To Jfrog"
+#      - name: "version upgrade package.json"
+#      - name: "Push Release To Jfrog"
         #run: jfrog rt npmi npm-virtual --build-name=bootstrap --build-number=1.0.0
-        run: jfrog rt build-collect-env
-      - name: "publish"
-        run: jfrog rt build-publish --env-exclude="*key*;*pass*;"
+#         run: jfrog rt build-collect-env
+#       - name: "publish"
+#         run: jfrog rt build-publish --env-exclude="*key*;*pass*;"
        # run: jfrog rt build-publish "test/" $ART_REPO/  --env-exclude="*key*;*pass*;"
         #run: jfrog rt u "test/" $ART_REPO/{1}/ --build-number=18
 # --flat=false --recursive=false

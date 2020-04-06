@@ -21,13 +21,13 @@ jobs:
         node-version: [12.x]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: ls -a via ssh
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-           cd /opt
-           ls -a
+#       - uses: actions/checkout@v1
+#       - name: ls -a via ssh
+#         uses: fifsky/ssh-action@master
+#         with:
+#           command: |
+#            cd /opt
+#            ls -a
 #           host: ${{ secrets.HOST }}
 #           user: $USER
 #           key: ${{ secrets.PRIVATE_KEY}}
